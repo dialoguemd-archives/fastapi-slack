@@ -38,11 +38,19 @@ workflows:
             - isort
             - test
           context: org-global-v2
+          filters:
+            branches:
+              only: master
+  release:
+    jobs:
       - publish:
           name: publish
           context: org-global-v2
-          requires:
-            - release
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
 
 jobs:
   publish:
@@ -56,43 +64,7 @@ jobs:
       - base/setup
       - python/setup
       - run:
-          name: "python: publish package"
+          name: "publish package on pypi"
           command: |
-            # Export for access in downstream steps e.g. slack messages
-            cci-export PACKAGE_NAME $(pcregrep -o1 'name *= *"(.+)"' < pyproject.toml)
-
-            if [ "$CIRCLE_BRANCH_IS_TRUNK" ]; then
-              cci-export NEXT_VER "$(semver::cci-calc-next-ver || kill $$)"
-            else
-              # Originally inspired by https://pypi.org/project/vcver/
-              # Related PEP https://www.python.org/dev/peps/pep-0440/
-              #
-              # The version published must always be unique, it cannot overwrite
-              # a previously published version. We need 0.dev0+ prefix to satisfy
-              # PEP 440.
-              #
-              # The prefix "0." is chosen because it is not _generally_ known at
-              # branch time what the next version will be: patch, minor, major?
-              #
-              cci-export NEXT_VER "0.dev+${CIRCLE_SHA1}"
-              log "development release, but based on current git history and commit message, next version would be $(semver::cci-calc-next-ver || kill $$)"
-            fi
-
-            # Manipulate pyproject version so that:
-            # 1. build produces a coresponding file name for the built packages
-            # 2. publish (later step) reads version in manifest to find packages
-            yj -tj < pyproject.toml | jq '.tool.poetry.version = $ENV.NEXT_VER' | yj -jt > pyproject.toml.next
-            mv pyproject.toml.next pyproject.toml
-
-            log 'configure poetry to publish to pypi'
             poetry config http-basic.pypi $PYPI_USER $PYPI_PASSWORD
-            poetry publish --build --no-interaction $PUBLISH_OPTIONS
-      - run:
-          name: "python: push git tag (trunk only)"
-          command: |
-            if [ "$CIRCLE_BRANCH_IS_TRUNK" ]; then
-              git tag "$NEXT_VER"
-              git push --tags
-            else
-              skip-step "git tags are not set for development releases"
-            fi
+            poetry publish --build --no-interaction
