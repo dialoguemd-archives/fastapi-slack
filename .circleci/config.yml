@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  base: dialogue/base@1.9.1
   release: dialogue/release@2.1.7
   python: dialogue/python@2.11.1
 
@@ -39,14 +40,18 @@ workflows:
           context: org-global-v2
       - publish:
           name: publish
-          <<: *executor
           context: org-global-v2
           requires:
             - release
 
 jobs:
   publish:
-
+    docker:
+    - image: cimg/python:3.9
+      auth:
+        username: $DOCKERHUB_USER
+        password: $DOCKERHUB_ACCESS_TOKEN
+    working_directory: ~/project/.
     steps:
       - base/setup
       - python/setup
@@ -78,8 +83,6 @@ jobs:
             # 2. publish (later step) reads version in manifest to find packages
             yj -tj < pyproject.toml | jq '.tool.poetry.version = $ENV.NEXT_VER' | yj -jt > pyproject.toml.next
             mv pyproject.toml.next pyproject.toml
-
-            export PUBLISH_OPTIONS=""
 
             log 'configure poetry to publish to pypi'
             poetry config http-basic.dialogue $PYPI_USER $PYPI_PASSWORD
