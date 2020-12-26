@@ -1,5 +1,9 @@
 # fastapi-slack
 
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-brightgreen.svg)](https://conventionalcommits.org)
+[![CircleCI](https://circleci.com/gh/dialoguemd/fastapi-slack.svg?style=svg&circle-token=d5088d3188d29980a98d21136927b0693ea7d90e)](https://circleci.com/gh/dialoguemd/fastapi-slack)
+[![codecov](https://codecov.io/gh/dialoguemd/fastapi-slack/branch/master/graph/badge.svg?token=CVU9WOYOEG)](https://codecov.io/gh/dialoguemd/fastapi-slack)
+
 Slack extension for FastAPI.
 
 ## Configuration - Environment Variables
@@ -12,7 +16,6 @@ Bot User OAuth Access Token as defined in OAuth & Permissions menu of the slack 
 
 App signing secret as shown in Basic Information menu of the slack app in the App
 Credentials section.
-
 
 ## Setup
 
