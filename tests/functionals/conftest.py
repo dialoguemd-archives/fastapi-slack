@@ -1,12 +1,12 @@
-from httpx import ASGITransport, AsyncClient
 from asgi_lifespan import LifespanManager
+from httpx import ASGITransport, AsyncClient
 from pytest import fixture
 
 
 @fixture
 async def app():
-    from fastapi_slack import with_valid_signature
     from demo import app
+    from fastapi_slack import with_valid_signature
 
     async with LifespanManager(app):
         app.dependency_overrides[with_valid_signature] = lambda: "signature"
