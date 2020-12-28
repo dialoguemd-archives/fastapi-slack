@@ -16,3 +16,9 @@ async def test_on_startup():
     from fastapi_slack import on_startup
 
     await on_startup()
+
+
+async def test_with_settings(settings):
+    from fastapi_slack import with_settings
+
+    assert with_settings() == settings
