@@ -49,4 +49,4 @@ def process_commands(slash_command: SlashCommand = Depends(with_slash_command)):
 ```
 
 
-[Slash Commands](https://api.slack.com/interactivity/slash-commands)
+[Slash Commands]: https://api.slack.com/interactivity/slash-commands
