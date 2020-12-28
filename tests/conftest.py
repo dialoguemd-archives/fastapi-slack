@@ -11,3 +11,10 @@ def environ():
     }
     with patch.dict("os.environ", environ, clear=True):
         yield environ
+
+
+@fixture
+def settings(environ):
+    from fastapi_slack import Settings
+
+    return Settings()
