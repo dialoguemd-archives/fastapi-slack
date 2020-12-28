@@ -58,9 +58,9 @@ def with_valid_timestamp(x_slack_request_timestamp: int = Header(...)):
 async def with_body(request: Request) -> bytes:
     """Return request body.
 
-    Per design,  a route cannot depend on a form field and consume body as dependencies
-    resolution consumes body.
-    Therefore, this is not using fastapi.Form to extract form data parameters.
+    Per design, a route cannot depend on a form field and consume body because
+    dependencies resolution consumes body.
+    Therefore, this is not using `fastapi.Form` to extract form data parameters.
     """
     return await request.body()
 
