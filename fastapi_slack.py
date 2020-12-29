@@ -46,7 +46,7 @@ async def on_startup():
         raise Exception("Missing environment variable(s)") from error
 
 
-def with_valid_timestamp(x_slack_request_timestamp: int = Header(...)):
+def with_valid_timestamp(x_slack_request_timestamp: int = Header(...)) -> int:
     now = time()
     more_than_thirty_seconds = now - x_slack_request_timestamp > 30
     if more_than_thirty_seconds:
@@ -78,7 +78,10 @@ def check_signature(secret: str, timestamp: int, signature: str, body: bytes) ->
 
 
 def with_settings() -> Settings:
-    return Settings()
+    try:
+        return Settings()
+    except Exception:
+        raise HTTPException(500)
 
 
 def with_valid_signature(
@@ -96,5 +99,5 @@ def with_valid_signature(
 def with_slash_command(
     form_data: dict = Depends(with_form_data),
     signature=Depends(with_valid_signature),
-):
+) -> SlashCommand:
     return SlashCommand(**form_data)
