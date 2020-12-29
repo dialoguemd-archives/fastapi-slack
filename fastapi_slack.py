@@ -80,8 +80,8 @@ def check_signature(secret: str, timestamp: int, signature: str, body: bytes) ->
 def with_settings() -> Settings:
     try:
         return Settings()
-    except Exception:
-        raise HTTPException(500)
+    except ValidationError as error:
+        raise HTTPException(500) from error
 
 
 def with_valid_signature(
