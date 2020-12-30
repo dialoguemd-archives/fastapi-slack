@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI
+
 from fastapi_slack import SlashCommand, router, with_slash_command
 
 app = FastAPI(title="demo")

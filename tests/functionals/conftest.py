@@ -6,6 +6,7 @@ from pytest import fixture
 @fixture
 async def app():
     from demo import app
+
     from fastapi_slack import with_valid_signature
 
     async with LifespanManager(app):
