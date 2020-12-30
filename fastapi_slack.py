@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pkg_resources import get_distribution
 from pydantic import BaseModel, BaseSettings, SecretStr, ValidationError
 
-__all__ = ["SlashCommand", "router", "with_slash_command"]
+__all__ = ["SlashCommand", "router"]
 __version__ = get_distribution("fastapi-slack").version
 
 router = APIRouter()
@@ -19,23 +19,6 @@ class Settings(BaseSettings):
 
     class Config:
         env_prefix = "slack_"
-
-
-class SlashCommand(BaseModel):
-    token: str
-    team_id: str
-    team_domain: str
-    enterprise_id: str
-    enterprise_name: str
-    channel_id: str
-    channel_name: str
-    user_id: str
-    user_name: str
-    command: str
-    text: str
-    response_url: str
-    trigger_id: str
-    api_app_id: str
 
 
 @router.on_event("startup")
@@ -96,8 +79,25 @@ def with_valid_signature(
     return signature
 
 
-def with_slash_command(
-    form_data: dict = Depends(with_form_data),
-    signature=Depends(with_valid_signature),
-) -> SlashCommand:
-    return SlashCommand(**form_data)
+class SlashCommand(BaseModel):
+    token: str
+    team_id: str
+    team_domain: str
+    enterprise_id: str
+    enterprise_name: str
+    channel_id: str
+    channel_name: str
+    user_id: str
+    user_name: str
+    command: str
+    text: str
+    response_url: str
+    trigger_id: str
+    api_app_id: str
+
+    def __init__(
+        self,
+        form_data: dict = Depends(with_form_data),
+        signature=Depends(with_valid_signature),
+    ):
+        super().__init__(**form_data)

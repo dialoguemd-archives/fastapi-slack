@@ -32,19 +32,19 @@ app.include_router(fastapi_slack.router)
 
 ## [Slash Commands]
 
-* Dependency `fastapi_slack.with_slash_command` validates request signature and extract
-  the slash command info needed to process it:
+* Dependding on `fastapi_slack.SlashCommand` automatically validates Slack request
+  signature and extract the info needed to process it:
 
 ```python
 from fastapi import Depends, FastAPI
-from fastapi_slack import SlashCommand, router, with_slash_command
+from fastapi_slack import SlashCommand, router
 
 app = FastAPI()
 app.include_router(router)
 
 
 @app.post("/slash-commands")
-def process_commands(slash_command: SlashCommand = Depends(with_slash_command)):
+def process_commands(slash_command: SlashCommand = Depends()):
     pass
 ```
 
