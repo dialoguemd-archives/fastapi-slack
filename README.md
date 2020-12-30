@@ -32,7 +32,7 @@ app.include_router(fastapi_slack.router)
 
 ## [Slash Commands]
 
-* Dependding on `fastapi_slack.SlashCommand` automatically validates Slack request
+* Depending on `fastapi_slack.SlashCommand` automatically validates Slack request
   signature and extract the info needed to process it:
 
 ```python
