@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-slack"
-version = "0.1.0"
+version = "0.2.0"
 description = "Slack extension for FastAPI."
 authors = ["Hadrien David <hadrien@dialogue.co>"]
 license = "MIT"
