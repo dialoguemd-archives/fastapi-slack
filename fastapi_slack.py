@@ -6,6 +6,7 @@ from urllib.parse import parse_qsl
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pkg_resources import get_distribution
 from pydantic import BaseModel, BaseSettings, SecretStr, ValidationError
+from typing import Optional
 
 __all__ = ["SlashCommand", "router"]
 __version__ = get_distribution("fastapi-slack").version
@@ -83,8 +84,8 @@ class SlashCommand(BaseModel):
     token: str
     team_id: str
     team_domain: str
-    enterprise_id: str
-    enterprise_name: str
+    enterprise_id: Optional[str]
+    enterprise_name: Optional[str]
     channel_id: str
     channel_name: str
     user_id: str
